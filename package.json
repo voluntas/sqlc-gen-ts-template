@@ -1,0 +1,21 @@
+{
+  "name": "sqlc-gen-ts-template",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "fmt": "biome format --write src/ test/",
+    "lint": "biome lint src/",
+    "test": "vitest run"
+  },
+  "license": "Apache-2.0",
+  "dependencies": {
+    "pg": "8.11.3"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.4.1",
+    "@types/pg": "8.10.9",
+    "testcontainers": "10.4.0",
+    "vite": "5.0.10",
+    "vitest": "1.1.0"
+  }
+}
