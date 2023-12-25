@@ -1,9 +1,14 @@
-import { Client } from 'pg'
+import postgres from 'postgres'
 import { GenericContainer, Wait } from 'testcontainers'
 import { expect, test } from 'vitest'
 
 import fs from 'fs'
-import { createAccount, deleteAccount, getAccount, listAccounts } from '../src/gen/sqlc/account_sql'
+import {
+  createAccount,
+  deleteAccount,
+  getAccount,
+  listAccounts,
+} from '../src/gen/sqlc/postgres/account_sql'
 
 test('account', async () => {
   // PostgreSQL コンテナを起動
@@ -19,41 +24,39 @@ test('account', async () => {
     .start()
 
   // postgres クライアントの設定
-  const client = new Client({
+  const sql = postgres({
     host: container.getHost(),
     port: container.getMappedPort(5432),
     database: 'testdb',
-    user: 'user',
+    username: 'user',
     password: 'password',
   })
-  await client.connect()
 
   // データベースへの ping (接続テスト)
-  await client.query('SELECT 1')
+  await sql`SELECT 1`
 
   // ファイルを読み込んでSQL文を取得
   const schemaSQL = fs.readFileSync('db/schema.sql', 'utf-8')
 
   // スキーマの初期化
-  await client.query(schemaSQL)
+  await sql.unsafe(schemaSQL)
 
-  await createAccount(client, { id: 'spam', displayName: 'Egg', email: 'ham@example.com' })
+  await createAccount(sql, { id: 'spam', displayName: 'Egg', email: 'ham@example.com' })
 
-  const account = await getAccount(client, { id: 'spam' })
+  const account = await getAccount(sql, { id: 'spam' })
   expect(account).not.toBeNull()
-  // ここダサい、なんかいい書き方 Vitest にありそう
   if (account) {
     expect(account.id).toBe('spam')
     expect(account.displayName).toBe('Egg')
     expect(account.email).toBe('ham@example.com')
   }
 
-  await deleteAccount(client, { id: 'spam' })
+  await deleteAccount(sql, { id: 'spam' })
 
-  const accounts = await listAccounts(client)
+  const accounts = await listAccounts(sql)
   expect(accounts.length).toBe(0)
 
-  await client.end()
+  await sql.end()
 
   // コンテナを停止
   await container.stop()

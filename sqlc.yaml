@@ -9,8 +9,17 @@ sql:
     queries: db/query/
     engine: postgresql
     codegen:
-      - out: src/gen/sqlc
+      - out: src/gen/sqlc/pg
         plugin: ts
         options:
           runtime: node
           driver: pg
+  - schema: db/schema.sql
+    queries: db/query/
+    engine: postgresql
+    codegen:
+      - out: src/gen/sqlc/postgres
+        plugin: ts
+        options:
+          runtime: node
+          driver: postgres
