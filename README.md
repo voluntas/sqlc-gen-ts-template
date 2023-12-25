@@ -6,9 +6,9 @@
 - [x] [Vitest](https://vitest.dev/) と [Testcontainers](https://testcontainers.com/) を利用したテストの実行
 - [x] [pg](https://www.npmjs.com/package/pg) と [postgres](https://www.npmjs.com/package/postgres) の両方バージョンのテストを用意
 
-## 気になること
+## バグ
 
-- displayName が戻り値で display_name になってしまっている
+- postgres を利用した場合、 `displayName` が戻り値で `display_name` になってしまっている
 
 ## sqlc 実行
 
