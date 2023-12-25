@@ -18,11 +18,18 @@ export interface GetAccountRow {
 }
 
 export async function getAccount(sql: Sql, args: GetAccountArgs): Promise<GetAccountRow | null> {
-    const rows = await sql.unsafe<GetAccountRow[]>(getAccountQuery, [args.id]);
+    const rows = await sql.unsafe(getAccountQuery, [args.id]).values();
     if (rows.length !== 1) {
         return null;
     }
-    return rows[0];
+    const row = rows[0];
+    return {
+        pk: row[0],
+        id: row[1],
+        displayName: row[2],
+        email: row[3],
+        createdAt: row[4]
+    };
 }
 
 export const listAccountsQuery = `-- name: ListAccounts :many
@@ -38,7 +45,13 @@ export interface ListAccountsRow {
 }
 
 export async function listAccounts(sql: Sql): Promise<ListAccountsRow[]> {
-    return await sql.unsafe<ListAccountsRow[]>(listAccountsQuery, []);
+    return (await sql.unsafe(listAccountsQuery, []).values()).map(row => ({
+        pk: row[0],
+        id: row[1],
+        displayName: row[2],
+        email: row[3],
+        createdAt: row[4]
+    }));
 }
 
 export const createAccountQuery = `-- name: CreateAccount :exec
@@ -75,11 +88,18 @@ export interface UpdateAccountDisplayNameRow {
 }
 
 export async function updateAccountDisplayName(sql: Sql, args: UpdateAccountDisplayNameArgs): Promise<UpdateAccountDisplayNameRow | null> {
-    const rows = await sql.unsafe<UpdateAccountDisplayNameRow[]>(updateAccountDisplayNameQuery, [args.displayName, args.id]);
+    const rows = await sql.unsafe(updateAccountDisplayNameQuery, [args.displayName, args.id]).values();
     if (rows.length !== 1) {
         return null;
     }
-    return rows[0];
+    const row = rows[0];
+    return {
+        pk: row[0],
+        id: row[1],
+        displayName: row[2],
+        email: row[3],
+        createdAt: row[4]
+    };
 }
 
 export const deleteAccountQuery = `-- name: DeleteAccount :exec

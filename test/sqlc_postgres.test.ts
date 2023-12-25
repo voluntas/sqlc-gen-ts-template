@@ -47,8 +47,7 @@ test('account', async () => {
   expect(account).not.toBeNull()
   if (account) {
     expect(account.id).toBe('spam')
-    // expect(account.displayName).toBe('Egg')
-    expect(account.display_name).toBe('Egg')
+    expect(account.displayName).toBe('Egg')
     expect(account.email).toBe('ham@example.com')
   }
 

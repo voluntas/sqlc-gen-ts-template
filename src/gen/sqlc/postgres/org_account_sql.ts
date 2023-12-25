@@ -33,10 +33,14 @@ export interface GetOrgAccountRow {
 }
 
 export async function getOrgAccount(sql: Sql, args: GetOrgAccountArgs): Promise<GetOrgAccountRow | null> {
-    const rows = await sql.unsafe<GetOrgAccountRow[]>(getOrgAccountQuery, [args.orgId, args.accountId]);
+    const rows = await sql.unsafe(getOrgAccountQuery, [args.orgId, args.accountId]).values();
     if (rows.length !== 1) {
         return null;
     }
-    return rows[0];
+    const row = rows[0];
+    return {
+        account: row[0],
+        org: row[1]
+    };
 }
 
