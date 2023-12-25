@@ -4,6 +4,7 @@
 
 - [x] [sqlc-gen-typescript](https://github.com/sqlc-dev/sqlc-gen-typescript) の利用
 - [x] [Vitest](https://vitest.dev/) と [Testcontainers](https://testcontainers.com/) を利用したテストの実行
+- [x] [pg](https://www.npmjs.com/package/pg) と [postgres](https://www.npmjs.com/package/postgres) の両方バージョンのテストを用意
 
 ## 気になること
 
